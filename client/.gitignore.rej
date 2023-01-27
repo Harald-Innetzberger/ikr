@@ -1,0 +1,9 @@
+diff a/client/.gitignore b/client/.gitignore	(rejected hunks)
+@@ -6,5 +6,7 @@
+ .env
+ .env.*
+ !.env.example
++.vercel
++.output
+ vite.config.js.timestamp-*
+ vite.config.ts.timestamp-*
