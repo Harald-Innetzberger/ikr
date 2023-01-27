@@ -5,14 +5,14 @@
       <Field :as="as" :id="name" :name="name" v-bind="attrs" />
       <ErrorMessage :name="name" class="smiley" />
     </div>
-    <button :disabled="isSubmitting">Submit</button>
+    <button type="submit">Submit</button>
   </Form>
 </template>
 
 <script setup lang="ts">
-import { Form, Field, ErrorMessage, useForm } from 'vee-validate';
+import { Form, Field, ErrorMessage } from 'vee-validate';
 
-const props = defineProps({
+defineProps({
   // Schema
   schema: {
     type: Object,
@@ -25,16 +25,12 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['update']);
+const emit = defineEmits(['update']);
 
-const { handleSubmit, isSubmitting } = useForm();
-
-const onSubmit = handleSubmit((values, { resetForm }) => {
-  console.log(values);
-  // all inputs valid, send stuff to the api
-  // emit('update', console.log('asödfljaöfjaö'));
-  resetForm();
-});
+function onSubmit(values: any) {
+  // Submit values to API...
+  emit('update', values);
+}
 </script>
 <style scoped>
 span[role='alert'] {

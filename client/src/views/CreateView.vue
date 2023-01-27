@@ -7,7 +7,13 @@ import axios from 'axios';
 import { VRow, VCol } from 'vuetify/components';
 import type { IkrModel } from '@/models/IkrModel';
 
-const initialFormData = ref<IkrModel>();
+const initialFormData = ref<IkrModel>({
+  category: 0,
+  number: 0,
+  description: '',
+  name: '',
+});
+
 const msg = ref('');
 
 // Create all required form fields for schema.
@@ -23,6 +29,7 @@ const formSchema = {
     },
     {
       'v-model': 'formdata.number',
+      model: 'formdata.number',
       label: 'Kontonummer',
       name: 'number',
       as: 'input',
@@ -36,6 +43,7 @@ const formSchema = {
       as: 'textarea',
       rows: 4,
       cols: 50,
+      type: 'text',
       rules: yup.string().required(),
     },
     {
@@ -55,9 +63,8 @@ if (ikrStore.getIkr) {
   initialFormData.value = ikr;
 }
 
-async function update() {
-  await console.log('updated on parent ....');
-  /*
+async function update(value: any) {
+  console.log(value);
   try {
     const response =
       '_id' in value // edit mode = _id in value ...
@@ -73,7 +80,6 @@ async function update() {
   } catch (error: any) {
     msg.value = error.response.data.message;
   }
-  */
 }
 </script>
 
@@ -85,6 +91,7 @@ async function update() {
         :initialFormData="initialFormData"
         @update="update"
       />
+      {{ msg }}
     </v-col>
   </v-row>
 </template>
