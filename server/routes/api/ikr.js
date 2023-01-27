@@ -8,7 +8,7 @@ const router = Router();
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const ikr = await Ikr.find({ accountNumber: id });
+    const ikr = await Ikr.find({ number: id });
     if (!ikr) {
       throw new Error(`Ikr with ${id} not found`);
     }
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
   const newIkr = new Ikr(req.body);
   // Proof if entry with account number already exists...
   const isInDB = await Ikr.countDocuments({
-    accountNumber: req.body.accountNumber,
+    number: req.body.number,
   });
   if (isInDB === 0) {
     try {
@@ -50,6 +50,19 @@ router.post("/", async (req, res) => {
     res.status(403).json({ message: 'Entry already exists in DB' })
   }
 });
+// Update Ikr
+router.post("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updated  = await Ikr.findByIdAndUpdate(id, req.body);
+    if (!updated) {
+      throw new Error("Ikr can't updated");
+    }
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+})
 // Delete Todo
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
