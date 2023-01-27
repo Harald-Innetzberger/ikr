@@ -10,9 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { Form, Field, ErrorMessage, useForm } from 'vee-validate';
-const form = ref(null);
 
 const props = defineProps({
   // Schema
@@ -27,7 +25,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update']);
+const emits = defineEmits(['update']);
 
 const { handleSubmit, isSubmitting } = useForm();
 
