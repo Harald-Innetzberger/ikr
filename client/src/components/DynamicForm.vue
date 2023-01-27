@@ -24,7 +24,6 @@ const props = defineProps({
   initialFormData: {
     type: Object,
     required: true,
-    default: null,
   },
 });
 
