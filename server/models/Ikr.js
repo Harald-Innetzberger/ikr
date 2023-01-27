@@ -1,19 +1,19 @@
 const { Schema, model } = require('mongoose');
 
 const ikrSchema = new Schema({
-    accountNumber: {
+    number: {
         type: Number,
         required: true
     },
-    accountCategory: {
+    category: {
         type: Number,
         required: true
     },
-    accountName: {
+    name: {
         type: String,
         required: true
     },
-    accountDescription: {
+    description: {
         type: String,
         required: true
     }
