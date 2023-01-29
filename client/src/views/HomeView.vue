@@ -1,5 +1,5 @@
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import axios from 'axios';
 import {
   VRow,
@@ -12,78 +12,50 @@ import {
   VBtn,
   VForm,
 } from 'vuetify/components';
-import { mdiMinusCircle, mdiPencil } from '@mdi/js';
+
+import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
 import { useIkrStore } from '@/stores/ikr';
-import router from '@/router';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-export default defineComponent({
-  components: {
-    VRow,
-    VCol,
-    VToolbar,
-    VCard,
-    VCardText,
-    VCardActions,
-    VTextField,
-    VBtn,
-    VForm,
-  },
-  setup() {
-    const selectedIkr = ref(null);
-    const accountNumberInput = ref(null);
-    const numberInputForm = ref(null);
+const selectedIkr = ref(null);
+const accountNumberInput = ref(null);
+const numberInputForm = ref(null);
 
-    const ikrStore = useIkrStore();
-    ikrStore.resetIkr();
+const ikrStore = useIkrStore();
+ikrStore.resetIkr();
 
-    // edit ikr data
-    function editIkrData() {
-      ikrStore.setIkr({ ikr: selectedIkr.value });
-      router.push({ name: 'createIkr' });
+// edit ikr data
+function editIkrData() {
+  ikrStore.setIkr({ ikr: selectedIkr.value });
+  router.push({ name: 'createIkr' });
+}
+
+// show ikr via account number input
+async function getDetailsOnInput() {
+  try {
+    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`);
+    selectedIkr.value = response.data[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// delete ikr entry
+async function deleteEntry() {
+  if (
+    window.confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?')
+  ) {
+    const id = selectedIkr.value['_id'];
+    try {
+      await axios.delete(`api/ikr/${id}`);
+      selectedIkr.value = null;
+      numberInputForm.value.reset();
+    } catch (error) {
+      console.log(error);
     }
-
-    // show ikr via account number input
-    async function getDetailsOnInput() {
-      try {
-        const response = await axios.get(
-          `/api/ikr/${accountNumberInput.value}`
-        );
-        selectedIkr.value = response.data[0];
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    // delete ikr entry
-    async function deleteEntry() {
-      if (
-        window.confirm(
-          'Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?'
-        )
-      ) {
-        const id = selectedIkr.value['_id'];
-        try {
-          await axios.delete(`api/ikr/${id}`);
-          selectedIkr.value = null;
-          numberInputForm.value.reset();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    return {
-      selectedIkr,
-      accountNumberInput,
-      getDetailsOnInput,
-      deleteEntry,
-      mdiMinusCircle,
-      mdiPencil,
-      numberInputForm,
-      editIkrData,
-    };
-  },
-});
+  }
+}
 </script>
 
 <template>
@@ -96,8 +68,8 @@ export default defineComponent({
           elevation="3"
           color="primary"
         ></v-toolbar>
-        <v-card-text class="text-center">
-          {{ selectedIkr ? selectedIkr['category'] : '---' }}
+        <v-card-text>
+          {{ selectedIkr ? selectedIkr['category'] : '' }}
         </v-card-text>
       </v-card>
     </v-col>
@@ -110,7 +82,7 @@ export default defineComponent({
           color="primary"
         ></v-toolbar>
         <v-card-text>
-          {{ selectedIkr ? selectedIkr['name'] : '---' }}
+          {{ selectedIkr ? selectedIkr['name'] : '' }}
         </v-card-text>
       </v-card>
     </v-col>
@@ -127,40 +99,43 @@ export default defineComponent({
             <v-text-field
               v-model="accountNumberInput"
               type="number"
-              label="Suche ..."
               @input="getDetailsOnInput"
               :rules="[
                 (v) =>
                   (v && v.length && v.length <= 4) ||
                   'Min. 1, Max. 4 characters',
               ]"
+              hide-details
             ></v-text-field>
           </v-form>
         </v-card-text>
         <!-- action buttons -->
-        <v-card-actions>
-          <v-btn
-            v-if="selectedIkr"
-            class="ma-2"
-            size="x-small"
-            color="primary"
-            variant="outlined"
-            :prepend-icon="mdiPencil"
-            @click="editIkrData"
-          >
-            Eintrag bearbeiten
-          </v-btn>
-          <v-btn
-            v-if="selectedIkr"
-            class="ma-2"
-            size="x-small"
-            color="error"
-            variant="outlined"
-            :prepend-icon="mdiMinusCircle"
-            @click="deleteEntry"
-          >
-            Eintrag löschen
-          </v-btn>
+        <v-card-actions v-if="selectedIkr">
+          <v-row>
+            <v-col cols="12">
+              <v-btn
+                class="ma-2"
+                stacked
+                :prepend-icon="mdiPencil"
+                variant="tonal"
+                color="primary"
+                @click="editIkrData"
+                title="Eintrag bearbeiten"
+              >
+                Eintrag bearbeiten
+              </v-btn>
+              <v-btn
+                stacked
+                :prepend-icon="mdiTrashCanOutline"
+                variant="tonal"
+                color="error"
+                @click="deleteEntry"
+                title="Eintrag löschen"
+              >
+                Eintrag löschen
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -173,9 +148,14 @@ export default defineComponent({
           color="primary"
         ></v-toolbar>
         <v-card-text>
-          {{ selectedIkr ? selectedIkr['description'] : '---' }}
+          <pre>{{ selectedIkr ? selectedIkr['description'] : '' }}</pre>
         </v-card-text>
       </v-card>
     </v-col>
   </v-row>
 </template>
+<style scoped>
+pre {
+  padding-left: 0;
+}
+</style>

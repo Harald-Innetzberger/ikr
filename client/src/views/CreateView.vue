@@ -4,7 +4,8 @@ import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
 import { useIkrStore } from '@/stores/ikr';
 import axios from 'axios';
-import { VRow, VCol } from 'vuetify/components';
+import { VRow, VCol, VAlert } from 'vuetify/components';
+import { mdiInformationOutline } from '@mdi/js';
 import type { IkrModel } from '@/models/IkrModel';
 
 const initialFormData = ref<IkrModel>({
@@ -20,7 +21,6 @@ const msg = ref('');
 const formSchema = {
   fields: [
     {
-      'v-model': 'formdata.category',
       label: 'Kontoklasse',
       name: 'category',
       as: 'input',
@@ -28,8 +28,6 @@ const formSchema = {
       rules: yup.number().required(),
     },
     {
-      'v-model': 'formdata.number',
-      model: 'formdata.number',
       label: 'Kontonummer',
       name: 'number',
       as: 'input',
@@ -37,7 +35,6 @@ const formSchema = {
       rules: yup.number().required(),
     },
     {
-      'v-model': 'formdata.description',
       label: 'Kontobeschreibung',
       name: 'description',
       as: 'textarea',
@@ -47,7 +44,6 @@ const formSchema = {
       rules: yup.string().required(),
     },
     {
-      'v-model': 'formdata.name',
       label: 'Kontoname',
       name: 'name',
       type: 'text',
@@ -64,19 +60,12 @@ if (ikrStore.getIkr) {
 }
 
 async function update(value: any) {
-  console.log(value);
   try {
-    const response =
-      '_id' in value // edit mode = _id in value ...
-        ? await axios.post<IkrModel>(`/api/ikr/${value._id}`, value)
-        : await axios.post<IkrModel>(`/api/ikr/`, value);
+    '_id' in value // edit mode = _id in value ...
+      ? await axios.post<IkrModel>(`/api/ikr/${value._id}`, value)
+      : await axios.post<IkrModel>(`/api/ikr/`, value);
     // msg ...
-    msg.value =
-      response.data && response.status === 200
-        ? '_id' in value
-          ? 'Eintrag bearbeitet'
-          : 'Eintrag hinzugefügt'
-        : '';
+    msg.value = '_id' in value ? 'Eintrag bearbeitet' : 'Eintrag hinzugefügt';
   } catch (error: any) {
     msg.value = error.response.data.message;
   }
@@ -86,12 +75,14 @@ async function update(value: any) {
 <template>
   <v-row dense>
     <v-col cols="12">
+      <v-alert v-if="msg" type="info" :icon="mdiInformationOutline">
+        {{ msg }}
+      </v-alert>
       <DynamicForm
         :schema="formSchema"
         :initialFormData="initialFormData"
         @update="update"
       />
-      {{ msg }}
     </v-col>
   </v-row>
 </template>

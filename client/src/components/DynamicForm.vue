@@ -5,7 +5,7 @@
       <Field :as="as" :id="name" :name="name" v-bind="attrs" />
       <ErrorMessage :name="name" class="smiley" />
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit">{{ buttonLabel }}</button>
   </Form>
 </template>
 
@@ -13,15 +13,18 @@
 import { Form, Field, ErrorMessage } from 'vee-validate';
 
 defineProps({
-  // Schema
   schema: {
     type: Object,
     required: true,
   },
-  // Initial Form Data
   initialFormData: {
     type: Object,
-    required: true,
+    required: false,
+  },
+  buttonLabel: {
+    type: String,
+    required: false,
+    default: 'Eintrag hinzufügen',
   },
 });
 

@@ -8,6 +8,9 @@
         <v-btn to="/create-ikr" class="ma-2" :prepend-icon="mdiPlusCircle">
           Eintrag hinzufügen
         </v-btn>
+
+        <v-btn v-if="'#'" to="/login" class="ma-2"> Login</v-btn>
+        <v-btn v-else to="/logout"> Logout</v-btn>
       </template>
     </v-app-bar>
     <v-main>
