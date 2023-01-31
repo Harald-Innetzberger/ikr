@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { User, validate } = require('../../models/User');
+const { route } = require('./ikr');
 
 // Create router working object to use 
 const router = Router();
@@ -24,7 +25,6 @@ router.post("/register", async (req, res) => {
 
 // Login user
 router.post("/login", async (req, res) => {
-    console.log(req.session);
     // validate the request
     const { error } = validate(req.body);
         if (error) {
@@ -32,18 +32,19 @@ router.post("/login", async (req, res) => {
             } else {
         try {
             const user = await User.findByCredentials(req.body.email, req.body.password);
-            const token = await user.generateAuthToken();
-            const cookie = 
+            const token = await user.generateAuthToken(); 
             res.send({ user, token });
+            res.session.name = '12345678';
+            console.log(req.session);
         } catch (error) {
             res.status(400).send({ message: error.data });
         }
     }
 });
 
-// Get User Details
-router.get("/me", async (req, res) => {
-    console.log('me');
+// Logout user
+router.post("/logout", async (req, res) => {
+    // req.session.destroy();
 })
 
 module.exports = router;
