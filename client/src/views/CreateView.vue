@@ -62,8 +62,12 @@ if (ikrStore.getIkr) {
 async function update(value: any) {
   try {
     '_id' in value // edit mode = _id in value ...
-      ? await axios.post<IkrModel>(`/api/ikr/${value._id}`, value)
-      : await axios.post<IkrModel>(`/api/ikr/`, value);
+      ? await axios.post<IkrModel>(`/api/ikr/${value._id}`, value, {
+          withCredentials: true,
+        })
+      : await axios.post<IkrModel>(`/api/ikr/`, value, {
+          withCredentials: true,
+        });
     // msg ...
     msg.value = '_id' in value ? 'Eintrag bearbeitet' : 'Eintrag hinzugefügt';
   } catch (error: any) {

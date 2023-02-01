@@ -34,7 +34,9 @@ function editIkrData() {
 // show ikr via account number input
 async function getDetailsOnInput() {
   try {
-    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`);
+    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`, {
+      withCredentials: true,
+    });
     selectedIkr.value = response.data[0];
   } catch (error) {
     console.log(error);
@@ -48,7 +50,9 @@ async function deleteEntry() {
   ) {
     const id = selectedIkr.value['_id'];
     try {
-      await axios.delete(`api/ikr/${id}`);
+      await axios.delete(`api/ikr/${id}`, {
+        withCredentials: true,
+      });
       selectedIkr.value = null;
       numberInputForm.value.reset();
     } catch (error) {

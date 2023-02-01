@@ -1,6 +1,7 @@
 const dotenv = require('dotenv').config();
-const cookieSession = require('cookie-session');
 const express = require('express');
+const session = require('express-session');
+const { v4: uuidv4 } = require('uuid');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,18 +11,29 @@ const UserApiRoutes = require('./routes/api/user');
 
 const app = express();
 
-app.use(cookieSession({
-    name: 'session',
-    keys: ['TESTSESSION'],
-    secret: 'secret',
+// use the session middleware of express
+app.use(session({
+    name: 'SessionCookie',
+    genid: function(req) {
+            return uuidv4();
+    },
+    secret: ['veryimportantsecret'], 
     resave: false,
-    saveUnitialized: true,
-    cookie: { secure: true },
-    // Cookie opts
-    maxAge: 24 * 60 * 60 * 1000 // = 24 Hours
+    saveUninitialized: false,
+    cookie: { 
+        // secure: true,
+        secure: false, // http enabled?
+        httpOnly: true,
+        maxAge: 600000,
+    },
 }));
 
-app.use(cors());
+// app.enable('trust proxy', 1);
+
+app.use(cors({
+    credentials: true,
+}));
+
 app.use(bodyParser.json());
 
 connectDB();
