@@ -34,8 +34,6 @@ router.post("/login", async (req, res) => {
             const user = await User.findByCredentials(req.body.email, req.body.password);
             const token = await user.generateAuthToken(); 
             res.send({ user, token });
-            res.session.name = '12345678';
-            console.log(req.session);
         } catch (error) {
             res.status(400).send({ message: error.data });
         }

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const PORT = process.env.PORT;
 const IkrApiRoutes = require('./routes/api/ikr');
 const UserApiRoutes = require('./routes/api/user');
+const path = require('path');
 
 const app = express();
 
@@ -41,6 +42,9 @@ connectDB();
 app.use('/api/ikr', IkrApiRoutes);
 app.use('/api/user', UserApiRoutes);
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT | PORT, () => {
     console.log(`Application running on port ${PORT} ...`);
-})
+});
+
+// easier to use. run client from servers static folder ...
+app.use(express.static(path.join(__dirname + "/public")));
