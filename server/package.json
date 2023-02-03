@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build",
     "start": "npm run start:server npm run start:client",
     "start:server": "nodemon index.js --ignore '../client'",
     "start:client": "npm run dev --prefix ../client",
