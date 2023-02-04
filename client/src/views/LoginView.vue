@@ -8,8 +8,6 @@ import * as yup from 'yup';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-
-const userForm = ref<UserModel>();
 const msg = ref('');
 
 // Create all required form fields for schema.
