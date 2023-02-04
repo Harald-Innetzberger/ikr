@@ -1,0 +1,12 @@
+diff a/.gitignore b/.gitignore	(rejected hunks)
+@@ -3,7 +3,10 @@
+ # Learn more about .gitignore:
+ #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+ 
++<<<<<<< HEAD
+ # Env File
++=======
++>>>>>>> fd49133 (x)
+ *.env
+ 
+ # Node artifact files

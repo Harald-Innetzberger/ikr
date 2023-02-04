@@ -4,9 +4,12 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Env File
 =======
 >>>>>>> fd49133 (x)
+=======
+>>>>>>> fd49133a93973ce5585f74597127528bce42b473
 *.env
 
 # Node artifact files
