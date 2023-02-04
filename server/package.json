@@ -1,16 +1,18 @@
 {
-  "name": "server",
-  "version": "1.0.0",
+  "name": "ikr-server",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:productive": "npm run build --prefix ../client && npm run copyfiles && git add . && git commit -m \"update\" && git push origin production",
+    "copyfiles": "xcopy \"../client/dist\" \"../server/public\" /E /Y",
     "start": "node index.js",
     "start:server": "nodemon index.js --ignore '../client'",
     "start:client": "npm run dev --prefix ../client",
     "dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["ikr","Kontenrahmen"],
+  "author": "Harald Innetzberger",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
