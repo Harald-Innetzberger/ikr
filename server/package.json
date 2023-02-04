@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:productive": "npm run build --prefix ../client && npm run copyfiles && git add . && git commit -m \"update\" && git push origin production",
+    "build:production": "npm run build --prefix ../client && npm run copyfiles && git add . && git commit -m \"autoupdate\" && git push origin production",
     "copyfiles": "xcopy \"../client/dist\" \"../server/public\" /E /Y",
     "start": "node index.js",
     "start:server": "nodemon index.js --ignore '../client'",
