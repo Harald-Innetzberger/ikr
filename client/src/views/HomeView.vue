@@ -1,67 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import axios from 'axios';
-import {
-  VRow,
-  VCol,
-  VToolbar,
-  VCard,
-  VCardText,
-  VCardActions,
-  VTextField,
-  VBtn,
-  VForm,
-} from 'vuetify/components';
-
-import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
-import { useIkrStore } from '@/stores/ikr';
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
-const selectedIkr = ref(null);
-const accountNumberInput = ref(null);
-const numberInputForm = ref(null);
-
-const ikrStore = useIkrStore();
-ikrStore.resetIkr();
-
-// edit ikr data
-function editIkrData() {
-  ikrStore.setIkr({ ikr: selectedIkr.value });
-  router.push({ name: 'createIkr' });
-}
-
-// show ikr via account number input
-async function getDetailsOnInput() {
-  try {
-    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`, {
-      withCredentials: true,
-    });
-    selectedIkr.value = response.data[0];
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-// delete ikr entry
-async function deleteEntry() {
-  if (
-    window.confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?')
-  ) {
-    const id = selectedIkr.value['_id'];
-    try {
-      await axios.delete(`api/ikr/${id}`, {
-        withCredentials: true,
-      });
-      selectedIkr.value = null;
-      numberInputForm.value.reset();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}
-</script>
-
 <template>
   <v-row>
     <v-col cols="12" sm="2">
@@ -158,6 +94,70 @@ async function deleteEntry() {
     </v-col>
   </v-row>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
+import {
+  VRow,
+  VCol,
+  VToolbar,
+  VCard,
+  VCardText,
+  VCardActions,
+  VTextField,
+  VBtn,
+  VForm,
+} from 'vuetify/components';
+
+import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
+import { useIkrStore } from '@/stores/ikr';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const selectedIkr = ref(null);
+const accountNumberInput = ref(null);
+const numberInputForm = ref(null);
+
+const ikrStore = useIkrStore();
+ikrStore.resetIkr();
+
+// edit ikr data
+function editIkrData() {
+  ikrStore.setIkr({ ikr: selectedIkr.value });
+  router.push({ name: 'createIkr' });
+}
+
+// show ikr via account number input
+async function getDetailsOnInput() {
+  try {
+    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`, {
+      withCredentials: true,
+    });
+    selectedIkr.value = response.data[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// delete ikr entry
+async function deleteEntry() {
+  if (
+    window.confirm('Sind Sie sicher, dass Sie diesen Eintrag löschen wollen?')
+  ) {
+    const id = selectedIkr.value['_id'];
+    try {
+      await axios.delete(`api/ikr/${id}`, {
+        withCredentials: true,
+      });
+      selectedIkr.value = null;
+      numberInputForm.value.reset();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+</script>
 <style scoped>
 pre {
   padding-left: 0;
