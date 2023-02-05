@@ -3,7 +3,17 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+<<<<<<< HEAD
 client/
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Env File
+=======
+>>>>>>> fd49133 (x)
+=======
+>>>>>>> fd49133a93973ce5585f74597127528bce42b473
+>>>>>>> f47e8ec6301686b98714fb3d8a82e1876841d98c
 *.env
 
 # Node artifact files
