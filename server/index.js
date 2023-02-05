@@ -1,48 +1,59 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const { v4: uuidv4 } = require('uuid');
+// saving sessions to mongo db
+const MongoDBStore = require('connect-mongodb-session')(session);
 const connectDB = require('./config/db');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const PORT = process.env.PORT;
+const path = require('path');
+const PORT = process.env.PORT | 5000;
 const IkrApiRoutes = require('./routes/api/ikr');
 const UserApiRoutes = require('./routes/api/user');
-const path = require('path');
 
+// create express app
 const app = express();
 
-// use the session middleware of express
-app.use(session({
-    name: 'SessionCookie',
-    genid: function(req) {
-            return uuidv4();
-    },
-    secret: ['veryimportantsecret'], 
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-        // secure: true,
-        secure: false, // http enabled?
-        httpOnly: true,
-        maxAge: 600000,
-    },
-}));
+// session part
+// https://blog.devgenius.io/mern-auth-with-session-part-2-session-with-mongodb-and-express-b185c17ad6f0
+const MAX_COOKIE_AGE = 1000 * 60 * 60 * 24 // = 24 hours
+const mongoDBStore = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: 'mySessions'
+  });
+// Catch errors
+mongoDBStore.on('error', function(error) {
+    console.log(error);
+  });
 
-// app.enable('trust proxy', 1);
+// use the session middleware of express
+const sess = {
+    secret: 'abc1234abc1234igel', 
+    name: 'session',
+    store: mongoDBStore, // to store session data on server db
+    cookie: { // set cookie in client to compare with server
+        maxAge: MAX_COOKIE_AGE,
+        sameSite: false,
+        secure: process.env === 'production' ? true : false,
+    },
+    resave: true,
+    saveUninitialized: false
+};
+app.use(session(sess));
 
 app.use(cors({
     credentials: true,
+    optionsSuccessStatus: 200, // IE11 ...204 bug
 }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-connectDB();
+connectDB(); // connect to mongo db via mongoose
 
+// Bring in routers
 app.use('/api/ikr', IkrApiRoutes);
 app.use('/api/user', UserApiRoutes);
 
-app.listen(process.env.PORT | PORT, () => {
+app.listen(PORT, () => {
     console.log(`Application running on port ${PORT} ...`);
 });
 

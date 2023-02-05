@@ -11,20 +11,21 @@
     "start:client": "npm run dev --prefix ../client",
     "dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
-  "keywords": ["ikr","Kontenrahmen"],
+  "keywords": [
+    "ikr",
+    "Kontenrahmen"
+  ],
   "author": "Harald Innetzberger",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "body-parser": "^1.20.1",
+    "connect-mongodb-session": "^3.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "joi": "^17.7.0",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.8.3",
-    "uuid": "^9.0.0"
+    "mongoose": "^6.8.3"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
