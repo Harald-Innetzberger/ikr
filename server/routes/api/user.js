@@ -1,13 +1,12 @@
 const { Router } = require('express');
 const { User, validate } = require('../../models/User');
-const { route } = require('./ikr');
 
 // Create router working object to use 
 const router = Router();
 
 // Register new user
 router.post("/register", async (req, res) => {
-    // validate the request
+    // validate the request with joi
     const { error } = validate(req.body);
     if (error) {
         res.status(400).json({ message: error.message });
@@ -15,34 +14,50 @@ router.post("/register", async (req, res) => {
         const user = new User(req.body);
         try {
             await user.save();
-            const token = await user.generateAuthToken();
-            res.status(201).json({ user, token });
+            res.status(201).json({ user });
         } catch (error) {
             res.status(400).json({ message: error.message });
         }
     }
 });
 
-// Login user
+// Login user (with creating session)
 router.post("/login", async (req, res) => {
-    // validate the request
+    // validate the request with joi
     const { error } = validate(req.body);
         if (error) {
             res.status(400).json({ message: error.message });
             } else {
         try {
             const user = await User.findByCredentials(req.body.email, req.body.password);
-            const token = await user.generateAuthToken(); 
-            res.send({ user, token });
+            // create user session in mongo db and attach session object.
+            const userSession = { email: user.email, role: user.role };
+            req.session.user = userSession;
+            res.send({ user });
         } catch (error) {
             res.status(400).send({ message: error.data });
         }
     }
 });
 
-// Logout user
+// User is authenticated ...
+router.get('/isAuth', async (req, res) => {
+    if (req.session.user) {
+        return res.json(req.session.user);
+    } else {
+        return res.status(401).json(null);
+    }
+});
+
+// Logout user, destroy session
 router.post("/logout", async (req, res) => {
-    // req.session.destroy();
+    if (req.session.user) {
+        req.session.destroy(); // server clean up
+        res.clearCookie('session'); // client clean up
+        return res.json({ msg: 'logging you out ...' });
+    } else {
+        return res.json({ msg: 'no user to logout ...' });
+    }
 })
 
 module.exports = router;

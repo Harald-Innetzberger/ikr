@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 // https://vegibit.com/information-expert-principle-applied-to-mongoose-models/
 
@@ -23,12 +22,11 @@ const userSchema = new Schema({
     required: true,
     trim: true,
    },
-   tokens: [{
-    token: {
-        type: String,
-        required: true,
-    }
-   }]
+   role: {
+    type: String,
+    required: false,
+    trim: true,
+   }
 })
 
 // validate user input with joi
@@ -36,7 +34,8 @@ function validateUser(user) {
     const schema = Joi.object({
         name: Joi.string().min(5).max(50),
         email: Joi.string().min(5).max(255).required().email(),
-        password: Joi.string().min(5).max(255).required()
+        password: Joi.string().min(5).max(255).required(),
+        role: Joi.string(),
     });
     return schema.validate(user);
 }
@@ -49,15 +48,6 @@ userSchema.pre("save", async function (next) {
     }
     next();
   });
-  
-  //this method generates an auth token for the user
-  userSchema.methods.generateAuthToken = async function () {
-    const user = this;
-    const token = jwt.sign({ _id: user._id.toString() }, "secret");
-    user.tokens = user.tokens.concat({ token });
-    await user.save();
-    return token;
-  };
   
   //this method search for a user by email and password.
   userSchema.statics.findByCredentials = async (email, password) => {

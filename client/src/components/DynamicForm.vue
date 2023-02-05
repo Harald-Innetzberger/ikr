@@ -1,8 +1,22 @@
 <template>
   <Form @submit="onSubmit" :initial-values="initialFormData">
-    <div v-for="{ as, name, label, ...attrs } in schema.fields" :key="name">
+    <div
+      v-for="{ as, name, label, options, ...attrs } in schema.fields"
+      :key="name"
+    >
       <label :for="name">{{ label }}</label>
-      <Field :as="as" :id="name" :name="name" v-bind="attrs" />
+      <Field :as="as" :id="name" :name="name" v-bind="attrs">
+        <template v-if="options && options.length">
+          <option
+            v-for="(option, index) in options"
+            :key="index"
+            :value="option.value"
+            :selected="option.value"
+          >
+            {{ option.text }}
+          </option>
+        </template>
+      </Field>
       <ErrorMessage :name="name" class="smiley" />
     </div>
     <button type="submit">{{ buttonLabel }}</button>
@@ -53,6 +67,7 @@ label {
   font-weight: bold;
 }
 input,
+select,
 textarea {
   width: 100%;
   padding: 12px 20px;

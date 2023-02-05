@@ -1,57 +1,59 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
-import CreateView from '@/views/CreateView.vue';
-import LoginView from '@/views/LoginView.vue';
-import { Role } from '@/models/role';
+import { useUserStore } from '@/stores/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-      meta: { authorize: [] },
-    },
-    {
-      path: '/create-ikr',
-      name: 'createIkr',
-      component: CreateView,
-      meta: { authorize: [Role.Admin] },
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/RegisterView.vue'),
+      meta: { requiresAuth: true, isAdmin: true },
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+      component: () => import('@/views/LoginView.vue'),
+      meta: { requiresAuth: false },
     },
-    // fallback path otherwise (Home)
-    // { path: '*', redirect: '/' },
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView,
+      meta: { requiresAuth: true, isAdmin: false },
+    },
+    {
+      path: '/create-ikr',
+      name: 'createIkr',
+      component: () => import('@/views/CreateView.vue'),
+      meta: { requiresAuth: true, isAdmin: true },
+    },
   ],
 });
 
-/*
-// Router auth middleware
-router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in ...
-  const { authorize } = to.meta;
-  const currentUser = // service user auth....
-
-  // user is authorized ...
-  if (authorize) {
-    if (!currentUser) {
-      // not logged in .. redirect to login page ..
-      return next({ path: '/login', query: { returnUrl: to.path } });
-    }
-    // check if route is restricted by role ...
-    if (authorize.length && !authorize.includes(currentUser.role)) {
-      // role not authorized redirect to home
-      return next({ path: '/' });
-    }
+// Router auth middleware // protect routes via roles
+router.beforeEach(async (to, from, next) => {
+  const res = await fetch('/api/user/isAuth');
+  const currentUser = await res.json();
+  // save user in store
+  if (currentUser) {
+    const userStore = useUserStore();
+    userStore.setUser(currentUser);
   }
-
-  // all ok .. go on
-  next();
-})
-*/
+  // user authenticated ?
+  if (to.name !== 'login' && to.meta.requiresAuth && !currentUser) {
+    next({ name: 'login' });
+    return;
+  }
+  // protect admin pages ...
+  if (to.meta.isAdmin && currentUser.role !== 'admin') {
+    next(false);
+    return;
+  } else {
+    next();
+    return;
+  }
+});
 
 export default router;

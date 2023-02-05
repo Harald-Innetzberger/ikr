@@ -24,7 +24,7 @@ const formSchema = {
       label: 'Passwort',
       name: 'password',
       as: 'input',
-      type: 'text',
+      type: 'password',
       rules: yup.string().required(),
     },
   ],
@@ -34,7 +34,7 @@ async function login(value: any) {
   try {
     await axios.post<UserModel>(`/api/user/login`, value);
     // msg ...
-    msg.value = 'Angemeldet ...';
+    msg.value = 'Anmeldung läuft ...';
     router.push('/');
   } catch (error: any) {
     msg.value = 'E-Mail und/oder Passwort falsch.';
