@@ -1,7 +1,32 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="2">
-      <v-card>
+    <v-col cols="12" sm="3">
+      <v-card min-height="150">
+        <v-toolbar
+          density="compact"
+          title="Kontonummer"
+          elevation="3"
+          color="primary"
+        ></v-toolbar>
+        <v-card-text>
+          <v-form ref="numberInputForm">
+            <v-text-field
+              dense
+              v-model.number="accountNumberInput"
+              type="number"
+              @input="getDetailsOnInput"
+              hide-details
+              :append-inner-icon="selectedIkr ? mdiPencil : ''"
+              :append-icon="selectedIkr ? mdiTrashCanOutline : ''"
+              @click:append-inner="editIkrData"
+              @click:append="deleteEntry"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="12" sm="4">
+      <v-card min-height="150">
         <v-toolbar
           density="compact"
           title="Kontoklasse"
@@ -13,8 +38,8 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" sm="10">
-      <v-card>
+    <v-col cols="12" sm="5">
+      <v-card min-height="150">
         <v-toolbar
           density="compact"
           title="Kontobezeichnung"
@@ -26,61 +51,8 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" sm="3">
-      <v-card>
-        <v-toolbar
-          density="compact"
-          title="Kontonummer"
-          elevation="3"
-          color="primary"
-        ></v-toolbar>
-        <v-card-text>
-          <v-form ref="numberInputForm">
-            <v-text-field
-              v-model="accountNumberInput"
-              type="number"
-              @input="getDetailsOnInput"
-              :rules="[
-                (v) =>
-                  (v && v.length && v.length <= 4) ||
-                  'Min. 1, Max. 4 characters',
-              ]"
-              hide-details
-            ></v-text-field>
-          </v-form>
-        </v-card-text>
-        <!-- action buttons -->
-        <v-card-actions v-if="selectedIkr">
-          <v-row>
-            <v-col cols="12">
-              <v-btn
-                class="ma-2"
-                stacked
-                :prepend-icon="mdiPencil"
-                variant="tonal"
-                color="primary"
-                @click="editIkrData"
-                title="Eintrag bearbeiten"
-              >
-                Eintrag bearbeiten
-              </v-btn>
-              <v-btn
-                stacked
-                :prepend-icon="mdiTrashCanOutline"
-                variant="tonal"
-                color="error"
-                @click="deleteEntry"
-                title="Eintrag löschen"
-              >
-                Eintrag löschen
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-    <v-col cols="12" sm="9">
-      <v-card>
+    <v-col cols="12">
+      <v-card min-height="150">
         <v-toolbar
           density="compact"
           title="Kontobeschreibung"
