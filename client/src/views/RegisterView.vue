@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { VRow, VCol, VAlert } from 'vuetify/components';
-import { mdiInformationOutline } from '@mdi/js';
+import { VRow, VCol } from 'vuetify/components';
 import axios from 'axios';
 import type { UserModel } from '@/models/UserModel';
 import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-const router = useRouter();
-const msg = ref('');
+// import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
+// const router = useRouter();
 
 // Create all required form fields for schema.
 const formSchema = {
@@ -50,20 +48,18 @@ const formSchema = {
 async function register(value: any) {
   try {
     await axios.post<UserModel>(`/api/user/register`, value);
-    // msg ...
-    msg.value = 'Account registriert ...';
-    router.push('/');
+    // router.push('/');
+    toast('Benutzeraccount angelegt', { type: 'success' });
   } catch (error: any) {
-    msg.value = 'E-Mail und/oder Passwort falsch.';
+    toast('Ein Account mit dieser E-Mail Adresse existiert bereits', {
+      type: 'error',
+    });
   }
 }
 </script>
 <template>
   <v-row dense>
     <v-col cols="12">
-      <v-alert v-if="msg" type="info" :icon="mdiInformationOutline">
-        {{ msg }}
-      </v-alert>
       <DynamicForm
         :schema="formSchema"
         :buttonLabel="'Registrieren'"

@@ -76,15 +76,14 @@ import {
   VToolbar,
   VCard,
   VCardText,
-  VCardActions,
   VTextField,
-  VBtn,
   VForm,
 } from 'vuetify/components';
 
 import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
 import { useIkrStore } from '@/stores/ikr';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
 const router = useRouter();
 
 const selectedIkr = ref(null);
@@ -124,8 +123,10 @@ async function deleteEntry() {
       });
       selectedIkr.value = null;
       numberInputForm.value.reset();
+      toast('Eintrag gelöscht', { type: 'success' });
     } catch (error) {
       console.log(error);
+      toast('Fehler beim Löschen', { type: 'error' });
     }
   }
 }

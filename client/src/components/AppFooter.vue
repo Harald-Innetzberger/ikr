@@ -1,8 +1,12 @@
 <template>
   <v-footer class="justify-center">
-    <div class="bg-primary text-center w-100">
+    <span class="bg-primary w-100 text-right pr-4">
       IKR Kontenrahmen - {{ new Date().getFullYear() }}
-    </div>
+      |
+      <router-link to="/register" class="text-yellow"
+        >Account anlegen</router-link
+      >
+    </span>
   </v-footer>
 </template>
 <script setup lang="ts">

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { VRow, VCol, VAlert } from 'vuetify/components';
 import { mdiInformationOutline } from '@mdi/js';
 import type { IkrModel } from '@/models/IkrModel';
+import { toast } from 'vue3-toastify';
 
 const initialFormData = ref<IkrModel>({
   category: 0,
@@ -14,8 +15,6 @@ const initialFormData = ref<IkrModel>({
   description: '',
   name: '',
 });
-
-const msg = ref('');
 
 // Create all required form fields for schema.
 const formSchema = {
@@ -69,9 +68,11 @@ async function update(value: any) {
           withCredentials: true,
         });
     // msg ...
-    msg.value = '_id' in value ? 'Eintrag bearbeitet' : 'Eintrag hinzugefügt';
+    toast('_id' in value ? 'Eintrag bearbeitet' : 'Eintrag hinzugefügt', {
+      type: 'success',
+    });
   } catch (error: any) {
-    msg.value = error.response.data.message;
+    toast(error.response.data.message, { type: 'error' });
   }
 }
 </script>
@@ -79,9 +80,6 @@ async function update(value: any) {
 <template>
   <v-row dense>
     <v-col cols="12">
-      <v-alert v-if="msg" type="info" :icon="mdiInformationOutline">
-        {{ msg }}
-      </v-alert>
       <DynamicForm
         :schema="formSchema"
         :initialFormData="initialFormData"
