@@ -3,11 +3,12 @@ import { ref } from 'vue';
 import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
 import { useIkrStore } from '@/stores/ikr';
-import axios from 'axios';
-import { VRow, VCol, VAlert } from 'vuetify/components';
-import { mdiInformationOutline } from '@mdi/js';
+import { VRow, VCol } from 'vuetify/components';
 import type { IkrModel } from '@/models/IkrModel';
 import { toast } from 'vue3-toastify';
+import { inject } from 'vue';
+
+const $http: any = inject('$myHttp');
 
 const initialFormData = ref<IkrModel>({
   category: 0,
@@ -61,10 +62,10 @@ if (ikrStore.getIkr) {
 async function update(value: any) {
   try {
     '_id' in value // edit mode = _id in value ...
-      ? await axios.post<IkrModel>(`/api/ikr/${value._id}`, value, {
+      ? await $http.post(`/api/ikr/${value._id}`, value, {
           withCredentials: true,
         })
-      : await axios.post<IkrModel>(`/api/ikr/`, value, {
+      : await $http.post(`/api/ikr/`, value, {
           withCredentials: true,
         });
     // msg ...
