@@ -4,9 +4,10 @@ import axios from 'axios';
 import type { UserModel } from '@/models/UserModel';
 import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
-// import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
-// const router = useRouter();
+import { inject } from 'vue';
+
+const $http: any = inject('$myHttp');
 
 // Create all required form fields for schema.
 const formSchema = {
@@ -47,7 +48,7 @@ const formSchema = {
 
 async function register(value: any) {
   try {
-    await axios.post<UserModel>(`/api/user/register`, value);
+    await $http.post(`/api/user/register`, value);
     // router.push('/');
     toast('Benutzeraccount angelegt', { type: 'success' });
   } catch (error: any) {

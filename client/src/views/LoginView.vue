@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { VRow, VCol } from 'vuetify/components';
-import axios from 'axios';
-import type { UserModel } from '@/models/UserModel';
 import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
-import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
+import { inject } from 'vue';
+import { useRouter } from 'vue-router';
 const router = useRouter();
+
+const $http: any = inject('$myHttp');
 
 // Create all required form fields for schema.
 const formSchema = {
@@ -30,7 +31,7 @@ const formSchema = {
 
 async function login(value: any) {
   try {
-    await axios.post<UserModel>(`/api/user/login`, value);
+    await $http.post(`/api/user/login`, value);
     router.push('/');
     toast('Anmeldung erfolgreich ...', { type: 'success' });
   } catch (error: any) {

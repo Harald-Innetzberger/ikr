@@ -32,7 +32,7 @@ const router = createRouter({
   ],
 });
 
-// Router auth middleware // protect routes via roles
+// Router auth middleware // protect special administrative routes via roles
 router.beforeEach(async (to, from, next) => {
   const res = await fetch('/api/user/isAuth');
   const currentUser = await res.json();

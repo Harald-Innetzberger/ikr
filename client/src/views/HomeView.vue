@@ -12,7 +12,7 @@
           <v-form ref="numberInputForm">
             <v-text-field
               dense
-              v-model.number="accountNumberInput"
+              v-model="accountNumberInput"
               type="number"
               @input="getDetailsOnInput"
               hide-details
@@ -69,7 +69,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
 import {
   VRow,
   VCol,
@@ -79,12 +78,14 @@ import {
   VTextField,
   VForm,
 } from 'vuetify/components';
-
+import { inject } from 'vue';
 import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
 import { useIkrStore } from '@/stores/ikr';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 const router = useRouter();
+
+const $http: any = inject('$myHttp');
 
 const selectedIkr = ref(null);
 const accountNumberInput = ref(null);
@@ -102,7 +103,7 @@ function editIkrData() {
 // show ikr via account number input
 async function getDetailsOnInput() {
   try {
-    const response = await axios.get(`/api/ikr/${accountNumberInput.value}`, {
+    const response = await $http.get(`/api/ikr/${accountNumberInput.value}`, {
       withCredentials: true,
     });
     selectedIkr.value = response.data[0];
@@ -118,7 +119,7 @@ async function deleteEntry() {
   ) {
     const id = selectedIkr.value['_id'];
     try {
-      await axios.delete(`api/ikr/${id}`, {
+      await $http.delete(`api/ikr/${id}`, {
         withCredentials: true,
       });
       selectedIkr.value = null;
