@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { VRow, VCol } from 'vuetify/components';
-import axios from 'axios';
-import type { UserModel } from '@/models/UserModel';
 import DynamicForm from '@/components/DynamicForm.vue';
 import * as yup from 'yup';
 import { toast } from 'vue3-toastify';
