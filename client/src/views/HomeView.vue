@@ -59,7 +59,7 @@
           elevation="3"
           color="primary"
         ></v-toolbar>
-        <v-card-text>
+        <v-card-text class="card-description">
           <pre>{{ selectedIkr ? selectedIkr['description'] : '' }}</pre>
         </v-card-text>
       </v-card>
@@ -135,5 +135,9 @@ async function deleteEntry() {
 <style scoped>
 pre {
   padding-left: 0;
+}
+.card-description {
+  width: calc(100vw - 50px);
+  overflow-x: auto;
 }
 </style>

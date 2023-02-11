@@ -3,12 +3,15 @@ import 'vuetify/styles';
 import { createVuetify, type ThemeDefinition } from 'vuetify';
 import { mdi } from 'vuetify/iconsets/mdi-svg';
 
-const myCustomIkrTheme: ThemeDefinition = {
+const light: ThemeDefinition = {
   dark: false,
   colors: {
     background: '#FFFFFF',
-    primary: '#4527A0',
+    surface: '#FFFFFF',
+    primary: '#6200EE',
+    'primary-darken-1': '#3700B3',
     secondary: '#03DAC6',
+    'secondary-darken-1': '#018786',
     error: '#B00020',
     info: '#2196F3',
     success: '#4CAF50',
@@ -16,11 +19,19 @@ const myCustomIkrTheme: ThemeDefinition = {
   },
 };
 
+const dark: ThemeDefinition = {
+  dark: true,
+  colors: {
+    primary: '#00695C',
+  },
+};
+
 export default createVuetify({
   theme: {
-    defaultTheme: 'myCustomIkrTheme',
+    defaultTheme: 'light',
     themes: {
-      myCustomIkrTheme,
+      light,
+      dark,
     },
   },
   icons: {
