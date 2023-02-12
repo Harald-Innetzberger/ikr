@@ -38,11 +38,6 @@ const props = defineProps({
     type: Object,
     required: false,
   },
-  buttonLabel: {
-    type: String,
-    required: false,
-    default: 'Eintrag hinzufügen',
-  },
   showSubmitButton: {
     type: Boolean,
     required: false,
