@@ -1,2 +1,2 @@
-** IKR Kontenrahmen - Generator
-** Todo ReadMe
+** IKR Kontenrahmen - Generator **
+Generator für Industrie - Kontenrahmen
