@@ -9,19 +9,19 @@
           color="primary"
         ></v-toolbar>
         <v-card-text>
-          <v-form ref="numberInputForm">
-            <v-text-field
-              dense
-              v-model="accountNumberInput"
-              type="number"
-              @input="getDetailsOnInput"
-              hide-details
-              :append-inner-icon="showEditDelIcons ? mdiPencil : ''"
-              :append-icon="showEditDelIcons ? mdiTrashCanOutline : ''"
-              @click:append-inner="editIkrData"
-              @click:append="deleteEntry"
-            ></v-text-field>
-          </v-form>
+          <DynamicForm
+            :schema="formSchema"
+            :showSubmitButton="false"
+            @update="getDetailsOnInput"
+          />
+          <div v-if="showEditDelIcons">
+            <v-icon :icon="mdiPencil" @click="editIkrData" size="x-small" />
+            <v-icon
+              :icon="mdiTrashCanOutline"
+              @click="deleteEntry"
+              size="x-small"
+            />
+          </div>
         </v-card-text>
       </v-card>
     </v-col>
@@ -75,8 +75,7 @@ import {
   VToolbar,
   VCard,
   VCardText,
-  VTextField,
-  VForm,
+  VIcon,
 } from 'vuetify/components';
 import { inject } from 'vue';
 import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
@@ -84,17 +83,29 @@ import { useUserStore } from '@/stores/user';
 import { useIkrStore } from '@/stores/ikr';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
+import * as yup from 'yup';
+import DynamicForm from '@/components/DynamicForm.vue';
 const router = useRouter();
 
 const $http: any = inject('$myHttp');
 
 const selectedIkr = ref(null);
-const accountNumberInput = ref(null);
-const numberInputForm = ref(null);
-
 const userStore = useUserStore();
 const ikrStore = useIkrStore();
 ikrStore.resetIkr();
+
+// Create all required form fields for schema.
+const formSchema = {
+  fields: [
+    {
+      label: '',
+      name: 'accountNumber',
+      as: 'input',
+      type: 'number',
+      rules: yup.number().required().min(1).max(4),
+    },
+  ],
+};
 
 // show/hide edit and delete icons in template
 const showEditDelIcons = computed(() => {
@@ -110,12 +121,13 @@ function editIkrData() {
 }
 
 // show ikr via account number input
-async function getDetailsOnInput() {
-  if (!accountNumberInput.value) {
+async function getDetailsOnInput(data: any) {
+  const { accountNumber } = data;
+  if (!accountNumber) {
     selectedIkr.value = null;
   } else {
     try {
-      const response = await $http.get(`/api/ikr/${accountNumberInput.value}`, {
+      const response = await $http.get(`/api/ikr/${accountNumber}`, {
         withCredentials: true,
       });
       selectedIkr.value = response.data[0];
@@ -136,7 +148,6 @@ async function deleteEntry() {
         withCredentials: true,
       });
       selectedIkr.value = null;
-      numberInputForm.value.reset();
       toast('Eintrag gelöscht', { type: 'success' });
     } catch (error) {
       console.log(error);

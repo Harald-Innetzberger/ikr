@@ -19,14 +19,17 @@
       </Field>
       <ErrorMessage :name="name" class="smiley" />
     </div>
-    <button type="submit" class="v-btn bg-primary">{{ buttonLabel }}</button>
+    <button v-if="showSubmitButton" type="submit" class="v-btn bg-primary">
+      {{ dynamicButtonLabel }}
+    </button>
   </Form>
 </template>
 
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   schema: {
     type: Object,
     required: true,
@@ -40,9 +43,20 @@ defineProps({
     required: false,
     default: 'Eintrag hinzufügen',
   },
+  showSubmitButton: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update']);
+
+const dynamicButtonLabel = computed(() => {
+  return props.initialFormData && '_id' in props.initialFormData
+    ? 'Eintrag bearbeiten'
+    : 'Eintrag hinzufügen';
+});
 
 function onSubmit(values: any) {
   // Submit values to API...
