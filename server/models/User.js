@@ -2,8 +2,6 @@ const Joi = require('joi');
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// https://vegibit.com/information-expert-principle-applied-to-mongoose-models/
-
 // define user schema
 const userSchema = new Schema({
    name: {
