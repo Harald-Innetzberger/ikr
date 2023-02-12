@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
     },
   },
   getters: {
-    getUser: (state) => {
+    getUser: (state: any) => {
       return state.user;
     },
   },

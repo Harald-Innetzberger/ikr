@@ -31,49 +31,66 @@ router.get("/", async (req, res) => {
 });
 // Create Ikr
 router.post("/", async (req, res) => {
+  const { role } = req.session.user;
   const newIkr = new Ikr(req.body);
-  // Proof if entry with account number already exists...
-  const isInDB = await Ikr.countDocuments({
-    number: req.body.number,
-  });
-  if (isInDB === 0) {
-    try {
-      const ikr = await newIkr.save();
-      if (!ikr) {
-        throw new Error("Something was going wrong on creating a new Ikr");
+  if (role === 'admin') {
+    // Proof if entry with account number already exists...
+    const isInDB = await Ikr.countDocuments({
+      number: req.body.number,
+    });
+    if (isInDB === 0) {
+      try {
+        const ikr = await newIkr.save();
+        if (!ikr) {
+          throw new Error("Something was going wrong on creating a new Ikr");
+       }
+        res.status(200).json(ikr);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
       }
-      res.status(200).json(ikr);
+    } else {
+      res.status(403).json({ message: 'Entry already exists in DB' })
+    }
+  } else {
+    res.status(403).json({ message: 'User role admin is required to create a new entry.'})
+  }
+});
+
+// Update Ikr
+router.post("/:id", async (req, res) => {
+  const { role } = req.session.user;
+  const { id } = req.params;
+  if (role === 'admin') {
+    try {
+      const updated  = await Ikr.findByIdAndUpdate(id, req.body);
+      if (!updated) {
+        throw new Error("Ikr can't updated");
+      }
+      res.status(200).json(updated);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   } else {
-    res.status(403).json({ message: 'Entry already exists in DB' })
+    res.status(403).json({ message: 'User role admin is required to update an entry.'})
   }
 });
-// Update Ikr
-router.post("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updated  = await Ikr.findByIdAndUpdate(id, req.body);
-    if (!updated) {
-      throw new Error("Ikr can't updated");
-    }
-    res.status(200).json(updated);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-})
-// Delete Todo
+
+// Delete Ikr
 router.delete("/:id", async (req, res) => {
+  const { role } = req.session.user;
   const { id } = req.params;
-  try {
-    const removed = await Ikr.findByIdAndDelete(id);
-    if (!removed) {
-      throw new Error("Ikr can't removed");
+  if (role === 'admin') {
+    try {
+      const removed = await Ikr.findByIdAndDelete(id);
+      if (!removed) {
+        throw new Error("Ikr can't removed");
+      }
+      res.status(200).json(removed);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-    res.status(200).json(removed);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } else {
+    res.status(403).json({ message: 'User role admin is required to delete an entry.'})
   }
 });
 

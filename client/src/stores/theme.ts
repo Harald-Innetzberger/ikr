@@ -14,7 +14,5 @@ export const useThemeStore = defineStore('theme', {
       return state.theme;
     },
   },
-  persist: {
-    storage: sessionStorage,
-  },
+  persist: true,
 });

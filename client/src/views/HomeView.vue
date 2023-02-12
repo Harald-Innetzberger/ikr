@@ -16,8 +16,8 @@
               type="number"
               @input="getDetailsOnInput"
               hide-details
-              :append-inner-icon="selectedIkr ? mdiPencil : ''"
-              :append-icon="selectedIkr ? mdiTrashCanOutline : ''"
+              :append-inner-icon="showEditDelIcons ? mdiPencil : ''"
+              :append-icon="showEditDelIcons ? mdiTrashCanOutline : ''"
               @click:append-inner="editIkrData"
               @click:append="deleteEntry"
             ></v-text-field>
@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import {
   VRow,
   VCol,
@@ -80,6 +80,7 @@ import {
 } from 'vuetify/components';
 import { inject } from 'vue';
 import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';
+import { useUserStore } from '@/stores/user';
 import { useIkrStore } from '@/stores/ikr';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
@@ -91,8 +92,16 @@ const selectedIkr = ref(null);
 const accountNumberInput = ref(null);
 const numberInputForm = ref(null);
 
+const userStore = useUserStore();
 const ikrStore = useIkrStore();
 ikrStore.resetIkr();
+
+// show/hide edit and delete icons in template
+const showEditDelIcons = computed(() => {
+  return (
+    userStore.getUser && userStore.getUser.role === 'admin' && selectedIkr.value
+  );
+});
 
 // edit ikr data
 function editIkrData() {
@@ -102,13 +111,17 @@ function editIkrData() {
 
 // show ikr via account number input
 async function getDetailsOnInput() {
-  try {
-    const response = await $http.get(`/api/ikr/${accountNumberInput.value}`, {
-      withCredentials: true,
-    });
-    selectedIkr.value = response.data[0];
-  } catch (error) {
-    console.log(error);
+  if (!accountNumberInput.value) {
+    selectedIkr.value = null;
+  } else {
+    try {
+      const response = await $http.get(`/api/ikr/${accountNumberInput.value}`, {
+        withCredentials: true,
+      });
+      selectedIkr.value = response.data[0];
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

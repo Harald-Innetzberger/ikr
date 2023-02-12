@@ -40,7 +40,6 @@ function switchTheme() {
 }
 
 onMounted(() => {
-  console.log(themeStore.getTheme);
   if (themeStore.getTheme) {
     theme.global.name.value = themeStore.getTheme;
   }

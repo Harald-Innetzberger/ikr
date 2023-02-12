@@ -19,7 +19,7 @@
       </Field>
       <ErrorMessage :name="name" class="smiley" />
     </div>
-    <button type="submit">{{ buttonLabel }}</button>
+    <button type="submit" class="v-btn bg-primary">{{ buttonLabel }}</button>
   </Form>
 </template>
 

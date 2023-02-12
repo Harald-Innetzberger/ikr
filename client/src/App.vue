@@ -1,26 +1,24 @@
 <template>
-  <v-card>
-    <v-layout>
-      <v-app>
-        <!-- App Bar -->
-        <app-header />
-        <!-- Dynamic Main Content -->
-        <v-main>
-          <v-container fluid>
-            <RouterView />
-          </v-container>
-        </v-main>
-        <!-- App Footer -->
-        <app-footer />
-      </v-app>
-    </v-layout>
-  </v-card>
+  <v-layout>
+    <v-app>
+      <!-- App Bar -->
+      <app-header />
+      <!-- Dynamic Main Content -->
+      <v-main>
+        <v-container fluid>
+          <RouterView />
+        </v-container>
+      </v-main>
+      <!-- App Footer -->
+      <app-footer />
+    </v-app>
+  </v-layout>
 </template>
 
 <script setup lang="ts">
 import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
-import { VApp, VMain, VContainer, VLayout, VCard } from 'vuetify/components';
+import { VApp, VMain, VContainer, VLayout } from 'vuetify/components';
 </script>
 <style>
 html,
