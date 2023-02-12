@@ -14,7 +14,6 @@ const UserApiRoutes = require('./routes/api/user');
 const app = express();
 
 // session part
-// https://blog.devgenius.io/mern-auth-with-session-part-2-session-with-mongodb-and-express-b185c17ad6f0
 const MAX_COOKIE_AGE = 1000 * 60 * 60 * 24 // = 24 hours
 const mongoDBStore = new MongoDBStore({
     uri: process.env.MONGO_URI,
