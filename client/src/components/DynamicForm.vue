@@ -27,9 +27,8 @@
 
 <script setup lang="ts">
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import { computed } from 'vue';
 
-const props = defineProps({
+defineProps({
   schema: {
     type: Object,
     required: true,
