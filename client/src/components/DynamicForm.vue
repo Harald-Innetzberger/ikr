@@ -53,12 +53,6 @@ console.log(props.buttonLabel);
 
 const emit = defineEmits(['update']);
 
-const dynamicButtonLabel = computed(() => {
-  return props.initialFormData && '_id' in props.initialFormData
-    ? 'Eintrag bearbeiten'
-    : 'Eintrag hinzufügen';
-});
-
 function onSubmit(values: any) {
   // Submit values to API...
   emit('update', values);
