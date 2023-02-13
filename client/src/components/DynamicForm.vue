@@ -49,8 +49,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.buttonLabel);
-
 const emit = defineEmits(['update']);
 
 function onSubmit(values: any) {
