@@ -84,7 +84,8 @@ async function update(value: any) {
       <DynamicForm
         :schema="formSchema"
         :initialFormData="initialFormData"
-        :showSubmitButton="true"
+        :show-submit-button="true"
+        :button-label="'Eintrag bearbeiten'"
         @update="update"
       />
     </v-col>

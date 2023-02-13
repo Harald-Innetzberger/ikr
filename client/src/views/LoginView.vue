@@ -44,7 +44,8 @@ async function login(value: any) {
     <v-col cols="12">
       <DynamicForm
         :schema="formSchema"
-        :buttonLabel="'Anmelden'"
+        :show-submit-button="true"
+        :button-label="'Anmelden'"
         @update="login"
       />
     </v-col>

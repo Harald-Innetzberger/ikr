@@ -61,7 +61,8 @@ async function register(value: any) {
     <v-col cols="12">
       <DynamicForm
         :schema="formSchema"
-        :buttonLabel="'Registrieren'"
+        :show-submit-button="true"
+        :button-label="'Registrieren'"
         @update="register"
       />
     </v-col>

@@ -8,21 +8,30 @@
           elevation="3"
           color="primary"
         ></v-toolbar>
-        <v-card-text>
+        <v-card-item>
           <DynamicForm
             :schema="formSchema"
-            :showSubmitButton="false"
+            :show-submit-button="false"
             @update="getDetailsOnInput"
           />
-          <div v-if="showEditDelIcons">
-            <v-icon :icon="mdiPencil" @click="editIkrData" size="x-small" />
-            <v-icon
-              :icon="mdiTrashCanOutline"
-              @click="deleteEntry"
-              size="x-small"
-            />
-          </div>
-        </v-card-text>
+        </v-card-item>
+        <v-card-actions v-if="showEditDelIcons">
+          <v-spacer></v-spacer>
+          <v-btn
+            :icon="mdiPencil"
+            @click="editIkrData"
+            size="small"
+            variant="text"
+            title="Eintrag bearbeiten"
+          />
+          <v-btn
+            :icon="mdiTrashCanOutline"
+            @click="deleteEntry"
+            size="small"
+            variant="text"
+            title="Eintrag löschen"
+          />
+        </v-card-actions>
       </v-card>
     </v-col>
     <v-col cols="12" sm="4">
@@ -74,8 +83,11 @@ import {
   VCol,
   VToolbar,
   VCard,
+  VCardItem,
   VCardText,
-  VIcon,
+  VCardActions,
+  VSpacer,
+  VBtn,
 } from 'vuetify/components';
 import { inject } from 'vue';
 import { mdiPencil, mdiTrashCanOutline } from '@mdi/js';

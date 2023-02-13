@@ -20,7 +20,7 @@
       <ErrorMessage :name="name" class="smiley" />
     </div>
     <button v-if="showSubmitButton" type="submit" class="v-btn bg-primary">
-      {{ dynamicButtonLabel }}
+      {{ buttonLabel }}
     </button>
   </Form>
 </template>
@@ -43,7 +43,13 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  buttonLabel: {
+    type: String,
+    required: false,
+  },
 });
+
+console.log(props.buttonLabel);
 
 const emit = defineEmits(['update']);
 
