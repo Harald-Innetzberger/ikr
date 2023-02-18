@@ -82,7 +82,6 @@ import {
   VCol,
   VToolbar,
   VCard,
-  VCardItem,
   VCardText,
   VCardActions,
   VSpacer,
