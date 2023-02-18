@@ -5,7 +5,17 @@
       :key="name"
     >
       <label :for="name">{{ label }}</label>
-      <Field :as="as" :id="name" :name="name" v-bind="attrs">
+      <Field
+        :as="as"
+        :id="name"
+        :name="name"
+        v-bind="attrs"
+        @input="
+          showSubmitButton === false
+            ? onSubmit({ accountNumber: $event.target.value })
+            : null
+        "
+      >
         <template v-if="options && options.length">
           <option
             v-for="(option, index) in options"
@@ -39,8 +49,8 @@ defineProps({
   },
   showSubmitButton: {
     type: Boolean,
+    default: true,
     required: false,
-    default: false,
   },
   buttonLabel: {
     type: String,
@@ -50,9 +60,9 @@ defineProps({
 
 const emit = defineEmits(['update']);
 
-function onSubmit(values: any) {
-  // Submit values to API...
-  emit('update', values);
+// Submit on button click or on live input if submit button is false
+function onSubmit(value: any) {
+  emit('update', value);
 }
 </script>
 <style scoped>

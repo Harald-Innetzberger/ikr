@@ -114,7 +114,7 @@ const formSchema = {
       name: 'accountNumber',
       as: 'input',
       type: 'number',
-      rules: yup.number().required().min(1).max(4),
+      placeholder: 'eingeben ...',
     },
   ],
 };
