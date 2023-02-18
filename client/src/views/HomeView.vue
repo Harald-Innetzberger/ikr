@@ -8,13 +8,12 @@
           elevation="3"
           color="primary"
         ></v-toolbar>
-        <v-card-item>
-          <DynamicForm
-            :schema="formSchema"
-            :show-submit-button="false"
-            @update="getDetailsOnInput"
-          />
-        </v-card-item>
+        <DynamicForm
+          class="pr-2 pl-2 pt-1"
+          :schema="formSchema"
+          :show-submit-button="false"
+          @update="getDetailsOnInput"
+        />
         <v-card-actions v-if="showEditDelIcons">
           <v-spacer></v-spacer>
           <v-btn
@@ -95,7 +94,6 @@ import { useUserStore } from '@/stores/user';
 import { useIkrStore } from '@/stores/ikr';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
-import * as yup from 'yup';
 import DynamicForm from '@/components/DynamicForm.vue';
 const router = useRouter();
 

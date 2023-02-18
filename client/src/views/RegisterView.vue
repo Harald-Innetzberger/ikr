@@ -36,7 +36,7 @@ const formSchema = {
       name: 'role',
       as: 'select',
       options: [
-        { text: 'Benutzer', value: 'user' },
+        { text: 'Benutzer', value: 'user', selected: 'selected' },
         { text: 'Administrator', value: 'admin' },
       ],
       rules: yup.string().required(),

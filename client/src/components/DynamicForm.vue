@@ -17,8 +17,10 @@
         "
       >
         <template v-if="options && options.length">
+          <option value="" disabled>auswählen ...</option>
           <option
             v-for="(option, index) in options"
+            class="bg-primary"
             :key="index"
             :value="option.value"
             :selected="option.value"
