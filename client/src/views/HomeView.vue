@@ -7,30 +7,31 @@
           title="Kontonummer"
           elevation="3"
           color="primary"
-        ></v-toolbar>
+        >
+          <span v-if="showEditDelIcons">
+            <v-spacer></v-spacer>
+            <v-btn
+              :icon="mdiPencil"
+              @click="editIkrData"
+              size="small"
+              variant="text"
+              title="Eintrag bearbeiten"
+            />
+            <v-btn
+              :icon="mdiTrashCanOutline"
+              @click="deleteEntry"
+              size="small"
+              variant="text"
+              title="Eintrag löschen"
+            />
+          </span>
+        </v-toolbar>
         <DynamicForm
           class="pr-2 pl-2 pt-1"
           :schema="formSchema"
           :show-submit-button="false"
           @update="getDetailsOnInput"
         />
-        <v-card-actions v-if="showEditDelIcons">
-          <v-spacer></v-spacer>
-          <v-btn
-            :icon="mdiPencil"
-            @click="editIkrData"
-            size="small"
-            variant="text"
-            title="Eintrag bearbeiten"
-          />
-          <v-btn
-            :icon="mdiTrashCanOutline"
-            @click="deleteEntry"
-            size="small"
-            variant="text"
-            title="Eintrag löschen"
-          />
-        </v-card-actions>
       </v-card>
     </v-col>
     <v-col cols="12" sm="4">
