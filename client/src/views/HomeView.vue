@@ -84,7 +84,6 @@ import {
   VToolbar,
   VCard,
   VCardText,
-  VCardActions,
   VSpacer,
   VBtn,
 } from 'vuetify/components';

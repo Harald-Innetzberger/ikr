@@ -17,7 +17,7 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-// Get Ikr
+// Get all Ikrs
 router.get("/", async (req, res) => {
   try {
     const ikrList = await Ikr.find();

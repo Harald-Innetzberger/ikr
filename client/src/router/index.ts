@@ -24,10 +24,16 @@ const router = createRouter({
       meta: { requiresAuth: true, isAdmin: false },
     },
     {
-      path: '/create-ikr',
+      path: '/create',
       name: 'createIkr',
       component: () => import('@/views/CreateView.vue'),
       meta: { requiresAuth: true, isAdmin: true },
+    },
+    {
+      path: '/list',
+      name: 'listAllIkr',
+      component: () => import('@/views/ListAllView.vue'),
+      meta: { requiredAuth: true, isAdmin: false },
     },
   ],
 });

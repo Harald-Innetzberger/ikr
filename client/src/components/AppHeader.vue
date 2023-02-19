@@ -75,12 +75,11 @@ onMounted(() => {
     <v-btn class="mr-1" to="/" variant="text" title="Eintrag suchen"
       >Suche</v-btn
     >
-    <v-btn
-      class="mr-1"
-      to="/create-ikr"
-      variant="text"
-      title="Eintrag hinzufügen"
+    <v-btn class="mr-1" to="/create" variant="text" title="Eintrag hinzufügen"
       >Erstellen</v-btn
+    >
+    <v-btn class="mr-1" to="/list" variant="text" title="Kontenrahmen auflisten"
+      >Liste</v-btn
     >
     <v-btn v-if="!userStore.getUser" to="/login">Login</v-btn>
     <v-btn v-else @click="doLogout()">Logout</v-btn>
