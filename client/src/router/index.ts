@@ -33,7 +33,7 @@ const router = createRouter({
       path: '/list',
       name: 'listAllIkr',
       component: () => import('@/views/ListAllView.vue'),
-      meta: { requiredAuth: true, isAdmin: false },
+      meta: { requiresAuth: true, isAdmin: false },
     },
   ],
 });
