@@ -10,6 +10,11 @@ const $http: any = inject('$myHttp');
 const items = ref<IkrModel>();
 const loading = ref(true);
 const search = ref('');
+const headers = ref([
+  { title: 'Nummer', key: 'number' },
+  { title: 'Name', key: 'name' },
+  { title: 'Kategorie', key: 'category' },
+]);
 const sortBy = ref([{ key: 'number', order: 'asc' }]);
 
 async function getAllIkrs() {
@@ -45,11 +50,7 @@ onMounted(() => {
       density="compact"
       :loading="loading"
       loading-text="Kontenrahmen werden geladen ..."
-      :headers="[
-        { title: 'Nummer', key: 'number' },
-        { title: 'Name', key: 'name' },
-        { title: 'Kategorie', key: 'category' },
-      ]"
+      :headers="headers"
       :items="items"
       :search="search"
     />
